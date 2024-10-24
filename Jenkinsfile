@@ -13,12 +13,12 @@ pipeline {
     }
 
     stages {
-        stage('Setup Docker Config') {
-            steps {
-                sh 'mkdir -p ~/.docker'
-                sh 'echo \'{ "auths": { "https://index.docker.io/v1/": { "auth": "${DOCKERHUB_USERNAME}:${DOCKERHUB_PASSWORD}" } } }\' > ~/.docker/config.json'
-            }
-        }
+        // stage('Setup Docker Config') {
+        //     steps {
+        //         sh 'mkdir -p ~/.docker'
+        //         sh 'echo \'{ "auths": { "https://index.docker.io/v1/": { "auth": "${DOCKERHUB_USERNAME}:${DOCKERHUB_PASSWORD}" } } }\' > ~/.docker/config.json'
+        //     }
+        // }
 
         stage('Clean Workspace') {
             steps {
