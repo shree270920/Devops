@@ -26,7 +26,13 @@ pipeline {
             }
         }
 
-        
+        stage('Manual Docker Login') {
+            steps {
+                script {
+                    sh 'echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin'
+                }
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
