@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_CONFIG = "$WORKSPACE/.docker"
+        DOCKERHUB_USERNAME = 'shree2000'
+        DOCKERHUB_PASSWORD = credentials('Docker_Password')
         DOCKERHUB_DEV_REPO = "shree2000/dev"
         DOCKERHUB_PROD_REPO = "shree2000/prod"
     }
@@ -10,15 +11,14 @@ pipeline {
     stages {
         stage('Setup Docker Config') {
             steps {
-                sh 'mkdir -p $DOCKER_CONFIG'
-                sh 'echo \'{ "auths": { "https://index.docker.io/v1/": { "auth": "c2hyZWUyMDAwOk5kc2hyZWUyNw==" } } }\' > $DOCKER_CONFIG/config.json'
+                sh 'mkdir -p ~/.docker'
+                sh 'echo \'{ "auths": { "https://index.docker.io/v1/": { "auth": "c2hyZWUyMDAwOk5kc2hyZWUyNw==" } } }\' > ~/.docker/config.json'
             }
         }
 
         stage('Clean Workspace') {
             steps {
                 cleanWs()
-                sh 'rm -rf * .git'
             }
         }
 
@@ -35,6 +35,14 @@ pipeline {
                     dir("${WORKSPACE}") {
                         docker.build("${DOCKERHUB_DEV_REPO}:latest", '.')
                     }
+                }
+            }
+        }
+
+        stage('Manual Docker Login') {
+            steps {
+                script {
+                    sh 'echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin'
                 }
             }
         }
