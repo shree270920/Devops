@@ -26,10 +26,12 @@ pipeline {
             }
         }
 
-        stage('Manual Docker Login') {
+        stage('Docker Login') {
             steps {
                 script {
-                    sh 'echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin'
+                    withCredentials([usernamePassword(credentialsId: 'DivyaShreeDocker', usernameVariable: 'divyashree27', passwordVariable: 'Ndshree27@')]) {
+                        sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
+                    }
                 }
             }
         }
@@ -38,7 +40,7 @@ pipeline {
             steps {
                 script {
                     dir("${WORKSPACE}") {
-                        docker.build("${DOCKERHUB_DEV_REPO}:latest", '.')
+                        sh 'docker build -t $DOCKERHUB_DEV_REPO:latest .'
                     }
                 }
             }
@@ -47,10 +49,10 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    sh 'docker push ${DOCKERHUB_DEV_REPO}:latest'
+                    sh 'docker push $DOCKERHUB_DEV_REPO:latest'
                     if (env.BRANCH_NAME == 'main') {
-                        sh 'docker tag ${DOCKERHUB_DEV_REPO}:latest ${DOCKERHUB_PROD_REPO}:latest'
-                        sh 'docker push ${DOCKERHUB_PROD_REPO}:latest'
+                        sh 'docker tag $DOCKERHUB_DEV_REPO:latest $DOCKERHUB_PROD_REPO:latest'
+                        sh 'docker push $DOCKERHUB_PROD_REPO:latest'
                     }
                 }
             }
