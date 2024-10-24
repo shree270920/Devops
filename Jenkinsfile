@@ -2,10 +2,14 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USERNAME = 'shree2000'
-        DOCKERHUB_PASSWORD = 'Ndshree27@'
-        DOCKERHUB_DEV_REPO = "shree2000/dev"
-        DOCKERHUB_PROD_REPO = "shree2000/prod"
+        DOCKERHUB_USERNAME = 'divyashree27'
+        DOCKERHUB_PASSWORD = credentials('DivyaShreeDocker')
+        DOCKERHUB_DEV_REPO = "divyashree27/dev"
+        DOCKERHUB_PROD_REPO = "divyashree27/prod"
+    }
+
+    triggers {
+        githubPush()
     }
 
     stages {
