@@ -13,13 +13,6 @@ pipeline {
     }
 
     stages {
-        // stage('Setup Docker Config') {
-        //     steps {
-        //         sh 'mkdir -p ~/.docker'
-        //         sh 'echo \'{ "auths": { "https://index.docker.io/v1/": { "auth": "${DOCKERHUB_USERNAME}:${DOCKERHUB_PASSWORD}" } } }\' > ~/.docker/config.json'
-        //     }
-        // }
-
         stage('Clean Workspace') {
             steps {
                 cleanWs()
@@ -33,13 +26,7 @@ pipeline {
             }
         }
 
-        // stage('Manual Docker Login') {
-        //     steps {
-        //         script {
-        //             sh 'echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin'
-        //         }
-        //     }
-        // }
+        
 
         stage('Build Docker Image') {
             steps {
