@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Build the Docker image
-docker build -t divyashree27/dev:latest .
+docker build -t shree2000/dev:latest .
