@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_USERNAME = 'shree2000'
-        DOCKERHUB_PASSWORD = credentials('Docker_Password')
+        DOCKERHUB_PASSWORD = 'Ndshree27@'
         DOCKERHUB_DEV_REPO = "shree2000/dev"
         DOCKERHUB_PROD_REPO = "shree2000/prod"
     }
@@ -12,7 +12,7 @@ pipeline {
         stage('Setup Docker Config') {
             steps {
                 sh 'mkdir -p ~/.docker'
-                sh 'echo \'{ "auths": { "https://index.docker.io/v1/": { "auth": "c2hyZWUyMDAwOk5kc2hyZWUyNw==" } } }\' > ~/.docker/config.json'
+                sh 'echo \'{ "auths": { "https://index.docker.io/v1/": { "auth": "${DOCKERHUB_USERNAME}:${DOCKERHUB_PASSWORD}" } } }\' > ~/.docker/config.json'
             }
         }
 
@@ -29,20 +29,20 @@ pipeline {
             }
         }
 
+        stage('Manual Docker Login') {
+            steps {
+                script {
+                    sh 'echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin'
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
                     dir("${WORKSPACE}") {
                         docker.build("${DOCKERHUB_DEV_REPO}:latest", '.')
                     }
-                }
-            }
-        }
-
-        stage('Manual Docker Login') {
-            steps {
-                script {
-                    sh 'echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin'
                 }
             }
         }
