@@ -26,15 +26,7 @@ pipeline {
             }
         }
 
-        stage('Docker Login') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'DivyaShreeDocker', usernameVariable: 'divyashree27', passwordVariable: 'Ndshree27@')]) {
-                        sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
-                    }
-                }
-            }
-        }
+        
 
         stage('Build Docker Image') {
             steps {
