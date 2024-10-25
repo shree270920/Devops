@@ -8,8 +8,8 @@ WORKDIR /usr/src/app
 # Copy application dependency manifests to the container image.
 COPY package*.json ./
 
-# Install dependencies.
-RUN npm install
+# Install dependencies. using npm ci for faster installs with lockfile
+RUN npm ci
 
 # Copy local code to the container image.
 COPY . .
