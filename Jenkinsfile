@@ -8,7 +8,17 @@ pipeline {
         DOCKERHUB_PROD_REPO = "shree2000/prod"
     }
 
+    triggers {
+        githubPush()
+    }
+
     stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
         stage('Checkout Code') {
             steps {
                 checkout scm
@@ -19,7 +29,9 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
-                    sh 'docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}'
+                    withCredentials([string(credentialsId: 'Docker_Password', variable: 'DOCKER_PASSWORD')]) {
+                        sh 'docker login -u $DOCKERHUB_USERNAME --password-stdin'
+                    }
                 }
             }
         }
@@ -28,7 +40,7 @@ pipeline {
             steps {
                 script {
                     dir("${WORKSPACE}") {
-                        sh 'docker build -t ${DOCKERHUB_DEV_REPO}:latest .'
+                        sh 'docker build -t $DOCKERHUB_DEV_REPO:latest .'
                     }
                 }
             }
@@ -37,11 +49,13 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    sh 'docker push ${DOCKERHUB_DEV_REPO}:latest'
+                    sh 'docker push $DOCKERHUB_DEV_REPO:latest'
                     if (env.BRANCH_NAME == 'main') {
-                        sh 'docker tag ${DOCKERHUB_DEV_REPO}:latest ${DOCKERHUB_PROD_REPO}:latest'
-                        sh 'echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin'
-                        sh 'docker push ${DOCKERHUB_PROD_REPO}:latest'
+                        sh 'docker tag $DOCKERHUB_DEV_REPO:latest $DOCKERHUB_PROD_REPO:latest'
+                        withCredentials([string(credentialsId: 'Docker_Password', variable: 'DOCKER_PASSWORD')]) {
+                            sh 'docker login -u $DOCKERHUB_USERNAME --password-stdin'
+                            sh 'docker push $DOCKERHUB_PROD_REPO:latest'
+                        }
                     }
                 }
             }
