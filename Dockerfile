@@ -14,8 +14,16 @@ RUN npm ci
 # Copy local code to the container image.
 COPY . .
 
-# Run the web service on container startup.
-CMD ["npm", "start"]
+# Build the app for production
+RUN npm run build
+
+# Install 'serve' to serve the production build
+RUN npm install -g serve
 
 # Tell the port number the container should expose.
 EXPOSE 80
+
+# Run the web service on container startup.
+CMD ["npm", "start"]
+
+
