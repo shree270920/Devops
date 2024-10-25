@@ -2,6 +2,8 @@ pipeline {
     agent any
 
     environment {
+        DOCKERHUB_USERNAME = 'shree2000'
+        DOCKERHUB_PASSWORD = credentials('Docker_ID')
         DOCKERHUB_DEV_REPO = "shree2000/dev"
         DOCKERHUB_PROD_REPO = "shree2000/prod"
     }
@@ -21,6 +23,14 @@ pipeline {
             steps {
                 checkout scm
                 sh 'ls -la'
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                script {
+                    sh 'echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin'
+                }
             }
         }
 
