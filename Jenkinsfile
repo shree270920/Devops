@@ -29,8 +29,8 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'Docker_Password', variable: 'DOCKER_PASSWORD')]) {
-                        sh 'docker login -u $DOCKERHUB_USERNAME --password-stdin'
+                    withCredentials([usernamePassword(credentialsId: 'Docker_Password', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
                     }
                 }
             }
@@ -52,8 +52,8 @@ pipeline {
                     sh 'docker push $DOCKERHUB_DEV_REPO:latest'
                     if (env.BRANCH_NAME == 'main') {
                         sh 'docker tag $DOCKERHUB_DEV_REPO:latest $DOCKERHUB_PROD_REPO:latest'
-                        withCredentials([string(credentialsId: 'Docker_Password', variable: 'DOCKER_PASSWORD')]) {
-                            sh 'docker login -u $DOCKERHUB_USERNAME --password-stdin'
+                        withCredentials([usernamePassword(credentialsId: 'Docker_Password', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                            sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
                             sh 'docker push $DOCKERHUB_PROD_REPO:latest'
                         }
                     }
