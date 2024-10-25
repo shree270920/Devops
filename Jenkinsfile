@@ -43,7 +43,7 @@ pipeline {
                 script {
                     sh 'docker push ${DOCKERHUB_DEV_REPO}:latest'
                     if (env.BRANCH_NAME == 'main') {
-                        sh 'docker login -u "shree2000"'
+                        sh 'docker login -u "shree2000" -p "Ndshree27@" docker.io'
                         sh 'docker tag ${DOCKERHUB_DEV_REPO}:latest ${DOCKERHUB_PROD_REPO}:latest'
                         sh 'docker push ${DOCKERHUB_PROD_REPO}:latest'
                     }
