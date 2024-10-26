@@ -1,6 +1,7 @@
 pipeline {
     agent any
 
+
     triggers {
         githubPush()
     }
@@ -42,4 +43,5 @@ pipeline {
             }
         }
     }
-}
+
+             
