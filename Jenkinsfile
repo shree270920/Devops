@@ -7,17 +7,17 @@ pipeline {
                 git branch: 'development', url: 'https://github.com/shree270920/Devops'
             }
         }
-        stage('Build') {
-            steps {
-                sh 'npm install'
-                sh 'npm run build'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'npm test'
-            }
-        }
+        // stage('Build') {
+        //     steps {
+        //         sh 'npm install'
+        //         sh 'npm run build'
+        //     }
+        // }
+        // stage('Test') {
+        //     steps {
+        //         sh 'npm test'
+        //     }
+        // }
         stage('Docker Build') {
             steps {
                 sh 'docker build -t shree2000/your-image-name:latest .'
