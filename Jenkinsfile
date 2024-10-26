@@ -41,11 +41,5 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            mail to: 'shree27092000@gmail.com',
-                 subject: "Pipeline ${currentBuild.fullDisplayName}",
-                 body: "Pipeline ${currentBuild.fullDisplayName} finished with status ${currentBuild.result}"
-        }
-    }
+    
 }
