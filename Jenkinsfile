@@ -20,9 +20,11 @@ pipeline {
         // }
         stage('Docker Build') {
     steps {
-        sh 'DOCKER_BUILDKIT=1 docker build -t shree2000/your-image-name:latest .'
+        sh 'docker buildx create --use'
+        sh 'DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 -t shree2000/your-image-name:latest .'
     }
 }
+
 
         stage('Docker Push') {
             steps {
