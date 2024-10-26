@@ -21,10 +21,10 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Staging') {
-            steps {
-                sh 'ssh -i /home/divya/guvi.pem ubuntu@ec2-3-93-210-82.compute-1.amazonaws.com "docker pull shree2000/your-image-name:latest && docker run -d -p 80:80 shree2000/your-image-name:latest"'
-            }
-        }
+        // stage('Deploy to Staging') {
+        //     steps {
+        //         sh 'ssh -i /home/divya/guvi.pem ubuntu@ec2-3-93-210-82.compute-1.amazonaws.com "docker pull shree2000/your-image-name:latest && docker run -d -p 80:80 shree2000/your-image-name:latest"'
+        //     }
+        // }
     }
 }
