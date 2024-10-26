@@ -7,25 +7,12 @@ pipeline {
                 git branch: 'development', url: 'https://github.com/shree270920/Devops'
             }
         }
-        // stage('Build') {
-        //     steps {
-        //         sh 'npm install'
-        //         sh 'npm run build'
-        //     }
-        // }
-        // stage('Test') {
-        //     steps {
-        //         sh 'npm test'
-        //     }
-        // }
         stage('Docker Build') {
-    steps {
-        sh 'docker buildx create --use'
-        sh 'DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 -t shree2000/your-image-name:latest .'
-    }
-}
-
-
+            steps {
+                sh 'docker buildx create --use'
+                sh 'DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 -t shree2000/your-image-name:latest .'
+            }
+        }
         stage('Docker Push') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'Docker_Password', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
@@ -40,6 +27,4 @@ pipeline {
             }
         }
     }
-
-    
 }
