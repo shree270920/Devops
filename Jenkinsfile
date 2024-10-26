@@ -19,10 +19,11 @@ pipeline {
         //     }
         // }
         stage('Docker Build') {
-            steps {
-                sh 'docker build -t shree2000/your-image-name:latest .'
-            }
-        }
+    steps {
+        sh 'DOCKER_BUILDKIT=1 docker build -t shree2000/your-image-name:latest .'
+    }
+}
+
         stage('Docker Push') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'Docker-Password', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
