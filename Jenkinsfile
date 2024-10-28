@@ -21,10 +21,7 @@ pipeline {
         }
         stage('Docker Build') {
             steps {
-                sh 'docker buildx create --name mybuilder'
-                sh 'docker buildx use mybuilder'
-                sh 'docker buildx inspect --bootstrap'
-                sh 'DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 -t ${DOCKER_IMAGE} --push .'
+                sh 'docker build -t ${DOCKER_IMAGE} .'
             }
         }
         stage('Docker Push') {
