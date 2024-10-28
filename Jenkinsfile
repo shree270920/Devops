@@ -33,18 +33,15 @@ pipeline {
             }
         }
         stage('Deploy to Staging') {
-            stage('Deploy to Staging') {
-    steps {
-        sh '''
-            ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/guvi.pem ubuntu@ec2-3-89-54-129.compute-1.amazonaws.com "
-                docker pull shree2000/dev:latest &&
-                docker stop \$(docker ps -q --filter expose=100) || true &&
-                docker run -d -p 100:80 shree2000/dev:latest
-            "
-        '''
-    }
-}
-
+            steps {
+                sh '''
+                    ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/guvi.pem ubuntu@ec2-3-89-54-129.compute-1.amazonaws.com "
+                        docker pull shree2000/dev:latest &&
+                        docker stop \$(docker ps -q --filter expose=100) || true &&
+                        docker run -d -p 100:80 shree2000/dev:latest
+                    "
+                '''
+            }
         }
     }
 }
