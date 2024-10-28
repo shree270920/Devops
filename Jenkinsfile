@@ -26,8 +26,9 @@ pipeline {
         stage('Docker Build') {
             steps {
                 sh 'docker buildx create --use'
-                sh 'DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 -t ${DOCKER_IMAGE} .'
+                sh 'DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 -t ${DOCKER_IMAGE} --push .'
             }
+
         }
         stage('Docker Push') {
             steps {
