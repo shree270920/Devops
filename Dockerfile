@@ -10,8 +10,8 @@ RUN rm -rf ./*
 # Step 4: Copy your React build files from the local build folder to the Nginx HTML directory
 COPY ./build .
 
-# Step 5: Expose the port that Nginx will serve on
-EXPOSE 80
+# Step 5: Expose the ports that Nginx will serve on
+EXPOSE 80 100
 
 # Step 6: Start Nginx (Nginx runs by default in the foreground)
 CMD ["nginx", "-g", "daemon off;"]
