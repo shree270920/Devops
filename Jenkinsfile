@@ -39,7 +39,7 @@ pipeline {
         }
         stage('Deploy to Staging') {
             steps {
-                sh 'ssh -i /var/lib/jenkins/.ssh/guvi.pem ubuntu@ec2-3-93-210-82.compute-1.amazonaws.com "docker pull shree2000/your-image-name:latest && docker run -d -p 100:80 shree2000/your-image-name:latest"'
+                sh 'ssh -i /var/lib/jenkins/.ssh/guvi.pem ubuntu@ec2-3-93-210-82.compute-1.amazonaws.com "docker pull shree2000/your-image-name:latest && docker run -d -p 3000:3000 shree2000/your-image-name:latest"'
             }
         }
     }
