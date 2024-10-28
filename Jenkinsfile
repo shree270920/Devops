@@ -19,11 +19,7 @@ pipeline {
                 }
             }
         }
-        // stage('Add Known Hosts') {
-        //     steps {
-        //         sh 'ssh-keyscan -H ec2-3-89-54-129.compute-1.amazonaws.com >> /var/lib/jenkins/.ssh/known_hosts'
-        //     }
-        // }
+        
         stage('Docker Build') {
             steps {
                 sh 'docker build -t ${DOCKER_IMAGE} .'
