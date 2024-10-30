@@ -19,6 +19,13 @@ pipeline {
                 }
             }
         }
+        stage('Print Branch Name') { // Debugging step
+            steps {
+                script {
+                    echo "Branch name is: ${env.BRANCH_NAME}"
+                }
+            }
+        }
         stage('Docker Build') {
             steps {
                 script {
