@@ -15,14 +15,17 @@ pipeline {
                     def branches = ['development', 'main']
                     if (branches.contains(env.BRANCH_NAME)) {
                         checkout scm
+                        // Set the GIT_BRANCH environment variable
+                        env.GIT_BRANCH = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
                     }
                 }
             }
         }
-        stage('Print Branch Name') { // Debugging step
+        stage('Set Branch Name') {
             steps {
                 script {
-                    echo "Branch name is: ${env.BRANCH_NAME}"
+                    env.BRANCH_NAME = "${env.GIT_BRANCH}"
+                    echo "Branch name is set to: ${env.BRANCH_NAME}"
                 }
             }
         }
