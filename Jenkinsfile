@@ -13,10 +13,14 @@ pipeline {
             steps {
                 script {
                     def branches = ['development', 'main']
-                    if (branches.contains(env.BRANCH_NAME.replaceFirst('origin/', ''))) {
+                    echo "Initial Branch Name: ${env.BRANCH_NAME}"
+                    if (branches.contains(env.BRANCH_NAME?.replaceFirst('origin/', ''))) {
                         checkout scm
                         // Set the GIT_BRANCH environment variable
                         env.GIT_BRANCH = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
+                        echo "GIT_BRANCH set to: ${env.GIT_BRANCH}"
+                    } else {
+                        echo "Branch name is null or not in the list."
                     }
                 }
             }
