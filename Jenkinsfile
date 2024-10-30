@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     def branches = ['development', 'main']
-                    if (branches.contains(env.BRANCH_NAME)) {
+                    if (branches.contains(env.BRANCH_NAME.replaceFirst('origin/', ''))) {
                         checkout scm
                         // Set the GIT_BRANCH environment variable
                         env.GIT_BRANCH = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
@@ -32,9 +32,9 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'development') {
+                    if (env.BRANCH_NAME == 'development' || env.BRANCH_NAME == 'origin/development') {
                         sh 'docker build -t ${DOCKER_IMAGE_DEV} .'
-                    } else if (env.BRANCH_NAME == 'main') {
+                    } else if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'origin/main') {
                         sh 'docker build -t ${DOCKER_IMAGE_PROD} .'
                     }
                 }
@@ -44,10 +44,10 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        if (env.BRANCH_NAME == 'development') {
+                        if (env.BRANCH_NAME == 'development' || env.BRANCH_NAME == 'origin/development') {
                             sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                             sh 'docker push ${DOCKER_IMAGE_DEV}'
-                        } else if (env.BRANCH_NAME == 'main') {
+                        } else if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'origin/main') {
                             sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                             sh 'docker push ${DOCKER_IMAGE_PROD}'
                         }
@@ -57,7 +57,9 @@ pipeline {
         }
         stage('Deploy to Staging') {
             when {
-                branch 'development'
+                expression {
+                    return env.BRANCH_NAME == 'development' || env.BRANCH_NAME == 'origin/development'
+                }
             }
             steps {
                 sh '''
@@ -71,7 +73,9 @@ pipeline {
         }
         stage('Deploy to Production') {
             when {
-                branch 'main'
+                expression {
+                    return env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'origin/main'
+                }
             }
             steps {
                 sh '''
